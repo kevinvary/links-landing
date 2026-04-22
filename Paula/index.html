@@ -7,31 +7,25 @@
 
   <script>
     const CONFIG = {
-      // 1. Enlace principal (El que se usa por defecto - hispanohablantes y EU/US)
-      onlyfansMain: "https://onlyfans.com/soypaulita",
+      // 1. Enlace PAID (tracking c22) — default para TODO país que no esté en trialCountries
+      onlyfansMain: "https://onlyfans.com/soypaulita/c22",
 
-      // 2. Enlace pago para países de medio oriente / Asia pobre
-      onlyfansPaid: "https://onlyfans.com/soypaulita/c21",
+      // 2. Enlace TRIAL (tracking) — solo para México, España, US y Europa
+      onlyfansTrial: "https://onlyfans.com/soypaulita/trial/srasiqbrmgkg1vci7uk9eurhgb4na5xc",
 
       // 3. Usuarios de Telegram
       telegramUsers: ["bby_valeria", "bb_valeria", "soyvaleria"],
 
-      // 4. Países que reciben el link PAGO (geofilter)
+      // 4. Países que reciben el link TRIAL (el resto va al paid c22)
       // NOTA: Venezuela y Colombia están bloqueados a nivel DNS/edge (ver functions/_middleware.js)
-      paidCountries: [
-        // Medio Oriente
-        "saudi arabia","united arab emirates","qatar","kuwait","bahrain","oman",
-        "jordan","lebanon","iraq","egypt","syria","yemen","palestine","libya",
-        "sudan","israel","morocco","tunisia","algeria",
-        // Asia del Sur
-        "india","bangladesh","pakistan","sri lanka","nepal","bhutan","afghanistan","maldives",
-        // Sudeste Asiático pobre / habla inglesa
-        "philippines","indonesia","cambodia","myanmar","laos","vietnam",
-        // África anglófona
-        "nigeria","kenya","ghana","uganda","tanzania","south africa","ethiopia",
-        "zimbabwe","zambia","malawi","rwanda","cameroon","ivory coast","senegal",
-        // LATAM bloqueados (link paid)
-        "costa rica","guatemala","ecuador","bolivia","argentina"
+      trialCountries: [
+        "mexico","spain","united states",
+        // Unión Europea + Reino Unido + EFTA
+        "france","germany","italy","portugal","netherlands","belgium","austria",
+        "switzerland","sweden","norway","denmark","finland","ireland","united kingdom",
+        "iceland","luxembourg","greece","poland","czechia","czech republic","slovakia",
+        "hungary","romania","bulgaria","croatia","slovenia","estonia","latvia","lithuania",
+        "malta","cyprus","andorra","monaco","liechtenstein","san marino"
       ],
 
       // 5. Países de habla portuguesa
@@ -812,10 +806,10 @@
     return 'en';
   }
 
-  // Detecta si el país es "de pago" (link pago en vez de principal)
-  function isPaidCountry(country) {
+  // Detecta si el país debe recibir el link TRIAL (México, España, US, Europa)
+  function isTrialCountry(country) {
     country = (country || '').toLowerCase();
-    return CONFIG.paidCountries.indexOf(country) !== -1;
+    return CONFIG.trialCountries.indexOf(country) !== -1;
   }
 
   // Ejecutar geo detection y aplicar idioma/link
@@ -842,9 +836,9 @@
         currentLang = detectLanguage(country);
         applyTranslations();
 
-        // Cambiar link si es país "pago"
-        if (isPaidCountry(country)) {
-          onlyfansURL = CONFIG.onlyfansPaid;
+        // Cambiar link al TRIAL si es país premium (MX, ES, US, Europa)
+        if (isTrialCountry(country)) {
+          onlyfansURL = CONFIG.onlyfansTrial;
         }
 
         console.log('[geo]', country, '→ lang:', currentLang, '| link:', onlyfansURL);
