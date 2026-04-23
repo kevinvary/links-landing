@@ -812,41 +812,84 @@
     return CONFIG.trialCountries.indexOf(country) !== -1;
   }
 
+  // Mapeo ISO alpha-2 → nombre del país (para detección de idioma)
+  var COUNTRY_CODE_TO_NAME = {
+    ES:'spain', MX:'mexico', AR:'argentina', CL:'chile', PE:'peru', VE:'venezuela',
+    CO:'colombia', EC:'ecuador', BO:'bolivia', PY:'paraguay', UY:'uruguay',
+    DO:'dominican republic', CU:'cuba', GT:'guatemala', HN:'honduras', SV:'el salvador',
+    NI:'nicaragua', PA:'panama', CR:'costa rica', PR:'puerto rico', GQ:'equatorial guinea',
+    BR:'brazil', PT:'portugal', AO:'angola', MZ:'mozambique', CV:'cape verde',
+    TL:'east timor', GW:'guinea-bissau'
+  };
+
   // Ejecutar geo detection y aplicar idioma/link
   (function(){
-    // Primero: intentar detectar idioma del navegador como fallback inmediato
+    // Primero: idioma del navegador como fallback inmediato
     var browserLang = (navigator.language || 'es').toLowerCase().slice(0, 2);
     if (['es', 'en', 'pt'].indexOf(browserLang) !== -1) {
       currentLang = browserLang;
     }
-    // Aplicar traducciones inmediatamente (sin esperar al API)
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', applyTranslations);
     } else {
       applyTranslations();
     }
 
-    // Luego: geo lookup para refinar
+    // Función que aplica geo una vez tenemos el país
+    function applyGeo(countryName, countryCode, source) {
+      countryName = (countryName || '').toLowerCase();
+      currentLang = detectLanguage(countryName);
+      applyTranslations();
+
+      if (isTrialCountry(countryName)) {
+        onlyfansURL = CONFIG.onlyfansTrial;
+      } else {
+        onlyfansURL = CONFIG.onlyfansMain;
+      }
+
+      console.log('[geo]', source, '| country:', countryCode, countryName, '| lang:', currentLang, '| link:', onlyfansURL);
+      showDebugPanel(countryCode, countryName, currentLang, onlyfansURL, source);
+    }
+
+    // 1. Preferir geo server-side (inyectado por _middleware.js)
+    if (window.__cfOnlyfansURL && window.__cfCountry) {
+      onlyfansURL = window.__cfOnlyfansURL; // ya está decidido en el edge
+      var code = window.__cfCountry;
+      var name = COUNTRY_CODE_TO_NAME[code] || '';
+      currentLang = detectLanguage(name);
+      applyTranslations();
+      console.log('[geo] server-side | country:', code, '| trial:', window.__cfIsTrial, '| link:', onlyfansURL);
+      showDebugPanel(code, name, currentLang, onlyfansURL, 'cf-middleware');
+      return;
+    }
+
+    // 2. Fallback: ipapi.co (para local dev o si el middleware falla)
     fetch('https://ipapi.co/json/')
       .then(function(r){ return r.json(); })
       .then(function(d){
-        var country = (d.country_name || '').toLowerCase();
-
-        // Aplicar idioma según país
-        currentLang = detectLanguage(country);
-        applyTranslations();
-
-        // Cambiar link al TRIAL si es país premium (MX, ES, US, Europa)
-        if (isTrialCountry(country)) {
-          onlyfansURL = CONFIG.onlyfansTrial;
-        }
-
-        console.log('[geo]', country, '→ lang:', currentLang, '| link:', onlyfansURL);
+        applyGeo(d.country_name, d.country_code, 'ipapi.co');
       })
       .catch(function(){
-        // Sin geo, se queda con el idioma del navegador
+        showDebugPanel('??','(geo failed)', currentLang, onlyfansURL, 'fallback');
       });
   })();
+
+  // Panel debug (visible solo con ?debug=1)
+  function showDebugPanel(code, name, lang, url, source) {
+    if (!/[?&]debug=1/.test(location.search)) return;
+    var existing = document.getElementById('__geoDebug');
+    if (existing) existing.remove();
+    var div = document.createElement('div');
+    div.id = '__geoDebug';
+    div.style.cssText = 'position:fixed;bottom:10px;left:10px;right:10px;background:rgba(0,0,0,.9);color:#0f0;font:11px/1.4 monospace;padding:10px;border-radius:8px;z-index:99999;border:1px solid #0f0;max-width:500px;margin:auto;word-break:break-all';
+    div.innerHTML =
+      '<b>🐞 GEO DEBUG</b><br>' +
+      'source: '+source+'<br>' +
+      'country: '+code+' ('+name+')<br>' +
+      'lang: '+lang+'<br>' +
+      'link: <span style="color:#ff0">'+url+'</span>';
+    document.body.appendChild(div);
+  }
 </script>
 
 <!-- Prize popup (hijo directo de body, fuera de cualquier stacking context) -->

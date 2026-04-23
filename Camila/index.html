@@ -595,6 +595,24 @@
   })();
 
   // =========================
+  // DEBUG PANEL (visible con ?debug=1)
+  // =========================
+  (function(){
+    if (!/[?&]debug=1/.test(location.search)) return;
+    var code = window.__cfCountry || '??';
+    var source = window.__cfCountry ? 'cf-middleware' : 'fallback';
+    var show = function(){
+      if (document.getElementById('__geoDebug')) return;
+      var div = document.createElement('div');
+      div.id = '__geoDebug';
+      div.style.cssText = 'position:fixed;bottom:10px;left:10px;right:10px;background:rgba(0,0,0,.9);color:#0f0;font:11px/1.4 monospace;padding:10px;border-radius:8px;z-index:99999;border:1px solid #0f0;max-width:500px;margin:auto;word-break:break-all';
+      div.innerHTML = '<b>🐞 GEO DEBUG</b><br>source: '+source+'<br>country: '+code+'<br>link: <span style="color:#ff0">'+(onlyfansURL||CONFIG.onlyfansMain)+'</span>';
+      document.body.appendChild(div);
+    };
+    if (document.body) show(); else document.addEventListener('DOMContentLoaded', show);
+  })();
+
+  // =========================
   // GEO
   // =========================
   document.addEventListener('DOMContentLoaded',()=>{
