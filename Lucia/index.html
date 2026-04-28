@@ -7,7 +7,8 @@
 
   <script>
     const CONFIG = {
-      onlyfansMain: "https://onlyfans.com/soyylucia"
+      onlyfansMain: "https://onlyfans.com/soyylucia",
+      onlyfansTrial: "https://onlyfans.com/soyylucia/trial/1xrgtkukgmfafgdevcyfkphjdtapspsc"
     };
 
     const I18N = {
@@ -57,7 +58,7 @@
 
     var currentLang = 'es';
     var t = I18N.es;
-    var onlyfansURL = CONFIG.onlyfansMain;
+    var onlyfansURL = (typeof window !== 'undefined' && window.__cfOnlyfansURL) || CONFIG.onlyfansMain;
   </script>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -236,9 +237,10 @@
 
   if (window.__cfCountry) {
     currentLang = detectLanguage(window.__cfCountry);
+    if (window.__cfOnlyfansURL) onlyfansURL = window.__cfOnlyfansURL;
     applyTranslations();
     setLocation();
-    console.log('[geo] cf-middleware | country:', window.__cfCountry, '| city:', window.__cfCity);
+    console.log('[geo] cf-middleware | country:', window.__cfCountry, '| city:', window.__cfCity, '| link:', onlyfansURL);
   } else {
     var browserLang = (navigator.language || 'es').toLowerCase().slice(0, 2);
     if (['es','en','pt'].indexOf(browserLang) !== -1) currentLang = browserLang;
