@@ -252,21 +252,24 @@
     setLocation();
     console.log('[geo] cf-middleware | country:', window.__cfCountry, '| city:', window.__cfCity, '| region:', window.__cfRegion, '| link:', onlyfansURL);
   } else {
-    // Fallback: idioma del navegador + ipapi.co
     var browserLang = (navigator.language || 'es').toLowerCase().slice(0, 2);
     if (['es','en','pt'].indexOf(browserLang) !== -1) currentLang = browserLang;
     applyTranslations();
+  }
 
-    fetch('https://ipapi.co/json/').then(function(r){return r.json();}).then(function(d){
-      window.__cfCountry = (d.country_code || '').toUpperCase();
-      window.__cfCity = d.city || '';
-      window.__cfRegion = d.region || '';
+  // Refinar ciudad/región con ipapi.co (más precisa que CF para nivel ciudad)
+  // NUNCA pisamos __cfCountry (server-side es la fuente de verdad para el geofilter)
+  fetch('https://ipapi.co/json/').then(function(r){return r.json();}).then(function(d){
+    if (d.city) window.__cfCity = d.city;
+    if (d.region) window.__cfRegion = d.region;
+    if (!window.__cfCountry && d.country_code) {
+      window.__cfCountry = d.country_code.toUpperCase();
       currentLang = detectLanguage(window.__cfCountry);
       applyTranslations();
-      setLocation();
-      console.log('[geo] ipapi-fallback | country:', window.__cfCountry, '| city:', window.__cfCity);
-    }).catch(function(){});
-  }
+    }
+    setLocation();
+    console.log('[geo] ipapi-refine | city:', window.__cfCity, '| region:', window.__cfRegion);
+  }).catch(function(){});
 
   // In-app browser hint
   (function(){
