@@ -245,18 +245,17 @@
     applyTranslations();
   }
 
-  // Refinar ciudad/región con ipapi.co (CF no siempre acierta a nivel ciudad)
-  fetch('https://ipapi.co/json/').then(function(r){return r.json();}).then(function(d){
-    if (d.city) window.__cfCity = d.city;
-    if (d.region) window.__cfRegion = d.region;
-    if (!window.__cfCountry && d.country_code) {
-      window.__cfCountry = d.country_code.toUpperCase();
+  // Fallback: si no hay __cfCountry (el middleware no corrió, ej. local dev), pedimos a ipapi.co
+  if (!window.__cfCountry) {
+    fetch('https://ipapi.co/json/').then(function(r){return r.json();}).then(function(d){
+      window.__cfCountry = (d.country_code || '').toUpperCase();
+      window.__cfCity = d.city || '';
+      window.__cfRegion = d.region || '';
       currentLang = detectLanguage(window.__cfCountry);
       applyTranslations();
-    }
-    setLocation();
-    console.log('[geo] ipapi-refine | city:', window.__cfCity, '| region:', window.__cfRegion);
-  }).catch(function(){});
+      setLocation();
+    }).catch(function(){});
+  }
 
   (function(){
     var ua = navigator.userAgent.toLowerCase();

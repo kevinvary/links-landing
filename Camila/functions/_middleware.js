@@ -6,12 +6,36 @@
 
 function jsonEsc(s){ return JSON.stringify(s == null ? '' : String(s)); }
 
+// Fetch ipapi.co con timeout y cache 24h por IP (más preciso que cf.city para muchos países)
+async function fetchIpapi(ip) {
+  if (!ip) return null;
+  try {
+    const controller = new AbortController();
+    const t = setTimeout(() => controller.abort(), 1200);
+    const resp = await fetch(`https://ipapi.co/${ip}/json/`, {
+      signal: controller.signal,
+      cf: { cacheTtl: 86400, cacheEverything: true }
+    });
+    clearTimeout(t);
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    if (data.error) return null;
+    return { city: data.city || '', region: data.region || '' };
+  } catch (e) {
+    return null;
+  }
+}
+
 export async function onRequest(context) {
   const { request, next } = context;
   const cf = request.cf || {};
   const country = (cf.country || request.headers.get('cf-ipcountry') || 'XX').toUpperCase();
-  const city = cf.city || '';
-  const region = cf.region || '';
+  const userIP = request.headers.get('cf-connecting-ip') || '';
+
+  // Llamar a ipapi.co server-side para ciudad/región precisas (con cache por IP)
+  const ipData = await fetchIpapi(userIP);
+  const city = (ipData && ipData.city) || cf.city || '';
+  const region = (ipData && ipData.region) || cf.region || '';
 
   const response = await next();
   const contentType = response.headers.get('content-type') || '';
