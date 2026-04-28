@@ -3,35 +3,67 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Landing Page</title>
+  <title>Lucia</title>
 
   <script>
     const CONFIG = {
-      // 1. Enlace principal (El que se usa por defecto)
-      onlyfansMain: "https://onlyfans.com/soyylucia",
-      
-      // 2. Enlace de prueba gratuita (Para los países que definas)
-      onlyfansTrial: "https://onlyfans.com/soyylucia",
-      
-      // 3. Usuarios de Telegram (Puedes añadir o quitar los que quieras, siempre entre comillas)
-      telegramUsers: ["bby_valeria", "bb_valeria", "soyvaleria"]
+      onlyfansMain: "https://onlyfans.com/soyylucia"
     };
-  </script>
 
-  <script>
+    const I18N = {
+      es: {
+        online: "Online",
+        tagline: "No vas a creer lo que tengo en OnlyFans ;) 👇🏻💕",
+        ageTitle: "Contenido para adultos",
+        ageDesc: "Este contenido es exclusivo para mayores de 18 años.<br>Confirma tu edad para continuar.",
+        ageBtn: "Sí, soy mayor de 18+",
+        openingTitle: "Abriendo",
+        openingDesc: "Redirigiendo al navegador externo...",
+        lastStepTitle: "Último paso",
+        lastStepDesc: "Instagram bloquea los enlaces directos.<br><strong>Mantén pulsado</strong> el botón hasta que aparezca una vista previa, luego toca <strong>\"Abrir enlace\"</strong>",
+        lastStepBtn: "Abrir contenido",
+        lastStepSub: "Mantén pulsado ↑ sin soltar",
+        openHint: "Toca <strong>•••</strong> para abrir en el navegador"
+      },
+      en: {
+        online: "Online",
+        tagline: "You won't believe what I have on OnlyFans ;) 👇🏻💕",
+        ageTitle: "Adult content",
+        ageDesc: "This content is exclusive for people over 18 years old.<br>Confirm your age to continue.",
+        ageBtn: "Yes, I'm 18+",
+        openingTitle: "Opening",
+        openingDesc: "Redirecting to external browser...",
+        lastStepTitle: "Last step",
+        lastStepDesc: "Instagram blocks direct links.<br><strong>Press and hold</strong> the button until a preview appears, then tap <strong>\"Open Link\"</strong>",
+        lastStepBtn: "Open content",
+        lastStepSub: "Keep holding ↑ without releasing",
+        openHint: "Tap <strong>•••</strong> to open in browser"
+      },
+      pt: {
+        online: "Online",
+        tagline: "Você não vai acreditar no que tenho no OnlyFans ;) 👇🏻💕",
+        ageTitle: "Conteúdo adulto",
+        ageDesc: "Este conteúdo é exclusivo para maiores de 18 anos.<br>Confirme sua idade para continuar.",
+        ageBtn: "Sim, sou maior de 18+",
+        openingTitle: "Abrindo",
+        openingDesc: "Redirecionando para o navegador externo...",
+        lastStepTitle: "Último passo",
+        lastStepDesc: "O Instagram bloqueia links diretos.<br><strong>Pressione e segure</strong> o botão até aparecer uma pré-visualização, depois toque em <strong>\"Abrir link\"</strong>",
+        lastStepBtn: "Abrir conteúdo",
+        lastStepSub: "Continue segurando ↑ sem soltar",
+        openHint: "Toque em <strong>•••</strong> para abrir no navegador"
+      }
+    };
+
+    var currentLang = 'es';
+    var t = I18N.es;
     var onlyfansURL = CONFIG.onlyfansMain;
-    (function () {
-      const p = new URLSearchParams(location.search);
-      const u = p.get('u');
-      if (u) { try { new URL(u); onlyfansURL = u; } catch(_){} }
-      if (p.has('reset')) { localStorage.removeItem('val_prize'); localStorage.removeItem('offerTimerEndTime'); }
-    })();
   </script>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
 
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
@@ -39,9 +71,48 @@
 
     .video-bg{position:fixed;top:0;left:0;width:100vw;height:100vh;overflow:hidden;z-index:-2;background-color:#111;}
     .video-bg video{width:100%;height:100%;object-fit:cover}
-    .overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.4);z-index:-1}
+    .overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.35);z-index:-1}
 
-    /* Tooltip "abrir en navegador" para in-app browsers */
+    .content{
+      position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:20px;text-align:center;color:#fff;gap:18px;
+    }
+
+    .online-info{
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 900;
+      font-size: 17px;
+      color: rgba(255,255,255,0.98);
+      text-shadow: 0 2px 8px rgba(0,0,0,.4);
+      letter-spacing: .2px;
+    }
+    .tagline{
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 900;
+      font-size: 19px;
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0,0,0,.5);
+      max-width: 90%;
+      line-height: 1.35;
+    }
+
+    .btn-of{
+      padding:14px 38px;margin-top:6px;border:0;border-radius:35px;
+      background:#00AFF0;color:#fff;
+      font-size:20px;font-weight:900;cursor:pointer;text-decoration:none;
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      box-shadow:0 0 20px rgba(255,255,255,.55), 0 0 40px rgba(0,175,240,.35);
+      animation:pulse 1.6s ease-in-out infinite;
+      letter-spacing:.5px;
+    }
+    .btn-of img{height:24px;width:24px;flex:0 0 auto}
+    .btn-of:hover{transform:scale(1.06);box-shadow:0 0 30px rgba(255,255,255,.8),0 0 60px rgba(0,175,240,.5)}
+
+    @keyframes pulse{
+      0%,100%{transform:scale(1)}
+      50%{transform:scale(1.06)}
+    }
+
     .open-hint{
       display:none;
       position:fixed;top:12px;right:12px;z-index:10000;
@@ -50,248 +121,69 @@
       padding:10px 14px;border-radius:12px;
       box-shadow:0 4px 20px rgba(0,0,0,.4);
       max-width:165px;text-align:center;
-      transition:background .3s,box-shadow .3s;
-    }
-    .open-hint.won{
-      background:linear-gradient(135deg,#ff6b9d,#c850c0);
-      color:#fff;
-      box-shadow:0 0 18px rgba(255,105,180,.7),0 0 35px rgba(200,80,192,.4);
-      animation:pulse 1.4s ease-in-out infinite;
     }
     .open-hint::after{
       content:'';position:absolute;top:-8px;right:18px;
       border-left:8px solid transparent;border-right:8px solid transparent;
       border-bottom:8px solid #fff;
-      transition:border-bottom-color .3s;
-    }
-    .open-hint.won::after{
-      border-bottom-color:#ff6b9d;
     }
 
-    .content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px;text-align:center;color:#fff;gap:12px;padding-top:30px;overflow-y:auto}
-
-    .online-info,.cta{
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight: 900;
-      color: rgba(255,255,255,0.98);
-      text-shadow: none;
-      letter-spacing: .2px;
-    }
-    .online-info{font-size:16px}
-    .cta{font-size:18px;margin-bottom:6px}
-
-    .btn{
-      padding:12px 24px;margin:10px;border:0;border-radius:30px;background:#ff66b2;color:#fff;
-      font-size:18px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;
-      box-shadow:0 0 20px rgba(255,105,180,.8),0 0 30px rgba(255,105,180,.6),0 0 40px rgba(255,105,180,.4);
-      animation:pulse 1.6s ease-in-out infinite;
-    }
-    .btn img{margin-right:10px;flex:0 0 auto;height:20px;width:20px}
-    .btn:hover{transform:scale(1.06);box-shadow:0 0 30px rgba(255,105,180,1),0 0 45px rgba(255,182,193,.8),0 0 60px rgba(255,182,193,.6)}
-
-    @keyframes pulse{
-      0%,100%{transform:scale(1)}
-      50%{transform:scale(1.08)}
-    }
-
-    .countdown-wrap{margin-top:6px;display:flex;flex-direction:column;align-items:center;gap:10px}
-    .discount-head{color:#ff2a2a;font-size:20px;letter-spacing:.5px}
-    .ends-mini{font-size:12px;opacity:.9}
-    .timer{display:flex;gap:10px;align-items:center;justify-content:center}
-    .tile{
-      width:52px;height:50px;border-radius:12px;background:#fff;color:#111;
-      display:flex;align-items:center;justify-content:center;
-      box-shadow:0 6px 18px rgba(0,0,0,.25);font-weight:900;font-variant-numeric:tabular-nums;
-      overflow:hidden;
-    }
-    .value{font-size:22px;line-height:1;transition:transform .25s ease}
-    .flip .value{transform:translateY(12%)}
-    .colon{color:#fff;font-size:24px;font-weight:900;margin:0 2px}
-    .labels{display:flex;gap:36px;margin-top:6px}
-    .label{font-size:10px;color:#fff;opacity:.9;text-align:center}
-    @media (max-width:420px){.tile{width:48px;height:46px}.value{font-size:22px}}
-
-    /* ====== RULETA ====== */
-    .roulette-section{margin-top:10px;display:flex;flex-direction:column;align-items:center;gap:8px}
-    .roulette-title{font-size:15px;color:#fff;opacity:.95;font-weight:700;letter-spacing:.3px;margin-bottom:14px}
-    .roulette-outer{position:relative;width:320px;height:320px}
-    .rwheel{
-      width:320px;height:320px;border-radius:50%;
-      background:#222;
-      border:4px solid rgba(255,255,255,.35);
+    #ageOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center;flex-direction:column;color:#fff}
+    .age-box{background:#1e1e1e;padding:30px;border-radius:20px;text-align:center;max-width:90%;box-shadow:0 0 25px rgba(255,255,255,.1)}
+    .age-icon{font-size:40px;margin-bottom:15px}
+    .age-title{font-size:22px;margin-bottom:10px;font-weight:700}
+    .age-desc{font-size:14px;margin-bottom:20px;opacity:.85;line-height:1.5}
+    .age-btn{
+      display:inline-block;padding:14px 32px;border:0;border-radius:25px;
+      font-size:16px;font-weight:bold;color:#fff;cursor:pointer;text-decoration:none;
+      background:#00AFF0;
+      -webkit-touch-callout:default !important;
       position:relative;overflow:hidden;
-      box-shadow:0 0 20px rgba(255,105,180,.5),0 0 40px rgba(200,80,192,.3);
     }
-    /* Highlight overlay que contra-rota para quedarse fijo en el puntero */
-    .rwheel-highlight{
-      position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;
-      background:radial-gradient(circle at 50% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,.1) 20%, transparent 45%);
-      pointer-events:none;z-index:3;
-      opacity:0;
-      transition:opacity .3s;
+    .age-btn .progress-fill{
+      position:absolute;left:0;top:0;height:100%;width:0;
+      background:rgba(255,255,255,.25);border-radius:25px;
+      transition:none;pointer-events:none;
     }
-    .rwheel.spin{animation:rspin 4s cubic-bezier(.17,.67,.12,.99) forwards}
-
-    /* 6 segments using clip trick */
-    .rfill{position:absolute;top:0;left:0;width:320px;height:320px;border-radius:50%;clip:rect(0px,320px,320px,160px)}
-    .rfill::after{content:"";position:absolute;top:0;left:0;width:320px;height:320px;border-radius:50%;clip:rect(0px,160px,320px,0px)}
-    /* 6 segments = 60deg each */
-    .rfill_1::after{background:#ff6b9d;transform:rotate(60deg)}
-    .rfill_2{transform:rotate(60deg)}.rfill_2::after{background:#c850c0;transform:rotate(60deg)}
-    .rfill_3{transform:rotate(120deg)}.rfill_3::after{background:#6c63ff;transform:rotate(60deg)}
-    .rfill_4{transform:rotate(180deg)}.rfill_4::after{background:#00c9a7;transform:rotate(60deg)}
-    .rfill_5{transform:rotate(240deg)}.rfill_5::after{background:#f7971e;transform:rotate(60deg)}
-    .rfill_6{transform:rotate(300deg)}.rfill_6::after{background:#ff4757;transform:rotate(60deg)}
-
-
-    /* Labels inside segments */
-    .rlabel{
-      position:absolute;width:100%;text-align:center;height:320px;
-      padding-top:20px;
-      font-size:12px;font-weight:800;color:#fff;
-      text-shadow:0 1px 4px rgba(0,0,0,.7);
-      pointer-events:none;
-      display:flex;flex-direction:column;align-items:center;gap:1px;
-    }
-    .rlabel em{font-style:normal;font-size:22px;display:block}
-    /* 6 segments: centers at 30, 90, 150, 210, 270, 330 deg */
-    .rlabel_1{transform:rotate(30deg)}
-    .rlabel_2{transform:rotate(90deg)}
-    .rlabel_3{transform:rotate(150deg)}
-    .rlabel_4{transform:rotate(210deg)}
-    .rlabel_5{transform:rotate(270deg)}
-    .rlabel_6{transform:rotate(330deg)}
-
-    /* Pointer */
-    .rpointer{
-      position:absolute;top:-14px;left:50%;transform:translateX(-50%);
-      width:0;height:0;
-      border-left:14px solid transparent;border-right:14px solid transparent;
-      border-top:22px solid #fff;
-      filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));
-      z-index:5;
-    }
-    /* Center button */
-    .rcenter{
-      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-      width:60px;height:60px;border-radius:50%;
-      background:linear-gradient(135deg,#ff6b9d,#c850c0);
-      color:#fff;font-size:11px;font-weight:900;
-      display:flex;align-items:center;justify-content:center;
-      cursor:pointer;z-index:4;
-      box-shadow:0 4px 15px rgba(0,0,0,.4);
-      border:3px solid #fff;
-      text-transform:uppercase;letter-spacing:.5px;
-      user-select:none;-webkit-user-select:none;
-    }
-    .rcenter:active{transform:translate(-50%,-50%) scale(.95)}
-    .rcenter.disabled{opacity:.6;pointer-events:none}
-
-    /* Prize popup */
-    .prize-popup{
-      display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.9);
-      z-index:9998;align-items:center;justify-content:center;flex-direction:column;
-    }
-    .prize-box{
-      background:linear-gradient(135deg,#1e1e2f,#2a1a3e);padding:28px 24px;border-radius:20px;
-      text-align:center;max-width:88%;color:#fff;
-      box-shadow:0 0 30px rgba(200,80,192,.4),0 0 60px rgba(255,105,180,.2);
-      animation:prizeIn .4s ease-out;
-    }
-    @keyframes prizeIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
-    .prize-emoji{font-size:50px;margin-bottom:10px}
-    .prize-title{font-size:20px;font-weight:900;margin-bottom:6px;color:#ff6b9d}
-    .prize-name{font-size:24px;font-weight:900;margin-bottom:16px;
-      background:linear-gradient(90deg,#ff6b9d,#f7971e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
-    }
-    .prize-sub{font-size:12px;opacity:.7;margin-bottom:12px;line-height:1.4}
-    .prize-age{font-size:11px;opacity:.5;margin-bottom:14px}
-    .prize-claim{
-      display:inline-block;padding:14px 28px;border:0;border-radius:25px;
-      font-size:14px;font-weight:bold;color:#fff;cursor:pointer;
-      background:linear-gradient(135deg,#ff6b9d,#c850c0);
-      animation:pulse 1.6s ease-in-out infinite;
-      text-decoration:none;
-    }
+    .age-sub{font-size:11px;margin-top:12px;opacity:.5;line-height:1.4}
+    .loading-dots{display:inline-block;margin-left:4px}
+    .loading-dots::after{content:'';animation:dots 1.5s steps(4,end) infinite}
+    @keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
+    .hand-anim{display:inline-block;animation:handPulse 1s ease-in-out infinite}
+    @keyframes handPulse{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
   </style>
 </head>
 
 <body>
 <noscript><div style="font-family:monospace;padding:20px;color:#007AFF">OK</div></noscript>
 
-<style>
-  #ageOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center;flex-direction:column;color:#fff}
-  .age-box{background:#1e1e1e;padding:30px;border-radius:20px;text-align:center;max-width:90%;box-shadow:0 0 25px rgba(255,255,255,.1)}
-  .age-icon{font-size:40px;margin-bottom:15px}
-  .age-title{font-size:22px;margin-bottom:10px;font-weight:700}
-  .age-desc{font-size:14px;margin-bottom:20px;opacity:.8;line-height:1.5}
-  .age-btn{
-    display:inline-block;padding:14px 32px;border:0;border-radius:25px;
-    font-size:16px;font-weight:bold;color:#fff;cursor:pointer;text-decoration:none;
-    background:linear-gradient(135deg,#ff6b9d,#c850c0);
-    -webkit-touch-callout:default !important;
-    position:relative;overflow:hidden;
-  }
-  .age-btn .progress-fill{
-    position:absolute;left:0;top:0;height:100%;width:0;
-    background:rgba(255,255,255,.25);border-radius:25px;
-    transition:none;pointer-events:none;
-  }
-  .age-btn.holding .progress-fill{
-    width:100%;transition:width 2s linear;
-  }
-  .age-sub{font-size:11px;margin-top:12px;opacity:.45;line-height:1.4}
-  .loading-dots{display:inline-block;margin-left:4px}
-  .loading-dots::after{content:'';animation:dots 1.5s steps(4,end) infinite}
-  @keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
-  .hand-anim{display:inline-block;animation:handPulse 1s ease-in-out infinite}
-  @keyframes handPulse{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-</style>
+<div class="open-hint" id="openHint" data-i18n-html="openHint">Toca <strong>•••</strong> para abrir en el navegador</div>
 
 <div id="ageOverlay">
   <div class="age-box">
-    <!-- FASE 1: Verificación de edad -->
     <div id="phase1">
       <div class="age-icon">⚠️</div>
-      <h2 class="age-title">Contenido para adultos</h2>
-      <p class="age-desc">Este contenido es exclusivo para mayores de 18 años.<br>Confirma tu edad para continuar.</p>
-      <button id="continueBtn" class="age-btn">Sí, soy mayor de 18+</button>
+      <h2 class="age-title" data-i18n="ageTitle">Contenido para adultos</h2>
+      <p class="age-desc" data-i18n-html="ageDesc">Este contenido es exclusivo para mayores de 18 años.<br>Confirma tu edad para continuar.</p>
+      <button id="continueBtn" class="age-btn" data-i18n="ageBtn">Sí, soy mayor de 18+</button>
     </div>
-
-    <!-- FASE 2: Intentando abrir (transición) -->
     <div id="phase2" style="display:none">
       <div class="age-icon">⏳</div>
-      <h2 class="age-title">Abriendo<span class="loading-dots"></span></h2>
-      <p class="age-desc">Redirigiendo al navegador externo...</p>
+      <h2 class="age-title"><span data-i18n="openingTitle">Abriendo</span><span class="loading-dots"></span></h2>
+      <p class="age-desc" data-i18n="openingDesc">Redirigiendo al navegador externo...</p>
     </div>
-
-    <!-- FASE 3: Long press (fallback iOS) -->
     <div id="phase3" style="display:none">
       <div class="age-icon"><span class="hand-anim">👆</span></div>
-      <h2 class="age-title">Último paso</h2>
-      <p class="age-desc">Instagram bloquea los enlaces directos.<br><strong>Mantén pulsado</strong> el botón hasta que aparezca una vista previa, luego toca <strong>"Abrir enlace"</strong></p>
+      <h2 class="age-title" data-i18n="lastStepTitle">Último paso</h2>
+      <p class="age-desc" data-i18n-html="lastStepDesc">Instagram bloquea los enlaces directos.<br><strong>Mantén pulsado</strong> el botón hasta que aparezca una vista previa, luego toca <strong>"Abrir enlace"</strong></p>
       <a id="longPressLink" href="#" class="age-btn">
         <span class="progress-fill"></span>
-        Abrir contenido
+        <span data-i18n="lastStepBtn">Abrir contenido</span>
       </a>
-      <p class="age-sub">Mantén pulsado ↑ sin soltar</p>
+      <p class="age-sub" data-i18n="lastStepSub">Mantén pulsado ↑ sin soltar</p>
     </div>
   </div>
 </div>
-
-<!-- Overlay "Has vuelto" para usuarios que ya giraron -->
-<div id="returnOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center;flex-direction:column;color:#fff">
-  <div class="age-box" style="background:linear-gradient(135deg,#1e1e2f,#2a1a3e);box-shadow:0 0 30px rgba(200,80,192,.4)">
-    <div class="age-icon">🔥</div>
-    <h2 class="age-title">¡Has vuelto!</h2>
-    <p class="age-desc">Tu premio te está esperando 😏<br><span id="returnPrizeName" style="font-size:20px;font-weight:900;background:linear-gradient(90deg,#ff6b9d,#f7971e);-webkit-background-clip:text;-webkit-text-fill-color:transparent"></span><br><strong>Aprovéchalo ahora</strong>, no durará mucho más</p>
-    <button id="returnBtn" class="age-btn" style="animation:pulse 1.6s ease-in-out infinite">Soy mayor de 18+ · RECLAMAR →</button>
-    <p class="age-sub">⚠️ Contenido exclusivo para adultos</p>
-  </div>
-</div>
-
-<!-- Hint para in-app browser -->
-<div class="open-hint" id="openHint">Toca <strong>•••</strong> para abrir en el navegador</div>
 
 <div class="video-bg">
   <video autoplay muted loop playsinline>
@@ -301,370 +193,97 @@
 <div class="overlay"></div>
 
 <div class="content">
-  <div class="cta"><i class="fa-solid fa-star"></i> Solo para ti, hoy gratis</div>
-
-  <button class="btn" id="freeBtn">
+  <div class="online-info">
+    🟢 <span data-i18n="online">Online</span> | 📍<span id="locationText">…</span>
+  </div>
+  <div class="tagline" data-i18n="tagline">No vas a creer lo que tengo en OnlyFans ;) 👇🏻💕</div>
+  <button class="btn-of" id="freeBtn">
     <img src="https://cdn.simpleicons.org/onlyfans/ffffff" alt="OnlyFans">
-    ESCRÍBEME AQUÍ → &nbsp;<i class="fa-solid fa-gift" style="font-size:16px;vertical-align:middle"></i>
+    <span>ONLYFANS</span>
   </button>
-
-
-  <!-- RULETA -->
-  <div class="roulette-section">
-    <div class="roulette-title">Gira y gana un premio exclusivo</div>
-    <div class="roulette-outer">
-      <div class="rpointer"></div>
-      <div class="rwheel" id="rouletteWheel">
-        <div class="rwheel-highlight" id="rwheelHighlight"></div>
-        <!-- color fills -->
-        <div class="rfill rfill_1"></div>
-        <div class="rfill rfill_2"></div>
-        <div class="rfill rfill_3"></div>
-        <div class="rfill rfill_4"></div>
-        <div class="rfill rfill_5"></div>
-        <div class="rfill rfill_6"></div>
-        <!-- labels -->
-        <div class="rlabel rlabel_1"><em><i class="fa-solid fa-camera"></i></em>Foto exclusiva</div>
-        <div class="rlabel rlabel_2"><em><i class="fa-solid fa-shoe-prints"></i></em>Pack Pies</div>
-        <div class="rlabel rlabel_3"><em><i class="fa-solid fa-fire"></i></em>Sexting 15 min</div>
-        <div class="rlabel rlabel_4"><em><i class="fa-solid fa-microphone"></i></em>Audio custom</div>
-        <div class="rlabel rlabel_5"><em><i class="fa-solid fa-crown"></i></em>Pack Completo</div>
-        <div class="rlabel rlabel_6"><em><i class="fa-solid fa-video"></i></em>Video custom</div>
-      </div>
-      <div class="rcenter" id="spinBtn">GIRAR</div>
-    </div>
-  </div>
-
-  <div class="countdown-wrap">
-    <div class="ends-mini">Termina en</div>
-
-    <div class="timer" role="timer" aria-live="polite">
-      <div class="tile"><div id="d1" class="value">1</div></div>
-      <div class="tile"><div id="d2" class="value">0</div></div>
-      <div class="colon">:</div>
-      <div class="tile"><div id="d3" class="value">0</div></div>
-      <div class="tile"><div id="d4" class="value">0</div></div>
-    </div>
-
-    <div class="labels">
-      <div class="label">MIN</div>
-      <div class="label"></div>
-      <div class="label">SEG</div>
-    </div>
-  </div>
 </div>
 
 <script>
-  // =========================
-  // TELEGRAM MULTICUENTA
-  // =========================
-  const tgUsers = CONFIG.telegramUsers;
-  const assignedTgUser = tgUsers[Math.floor(Math.random() * tgUsers.length)];
-
-  function goTelegramAssigned() {
-    const tgAppUrl = "tg://resolve?domain=" + assignedTgUser;
-    const webUrl  = "https://t.me/" + assignedTgUser;
-    window.location.href = tgAppUrl;
-    setTimeout(function () {
-      window.location.href = webUrl;
-    }, 800);
+  function detectLanguage(code) {
+    var SP = ['ES','MX','AR','CL','PE','VE','CO','EC','BO','PY','UY','DO','CU','GT','HN','SV','NI','PA','CR','PR','GQ'];
+    var PT = ['BR','PT','AO','MZ','CV','TL','GW','ST'];
+    if (SP.indexOf(code) !== -1) return 'es';
+    if (PT.indexOf(code) !== -1) return 'pt';
+    return 'en';
   }
-  var tgBtn = document.getElementById('tgBtn');
-  if (tgBtn) tgBtn.addEventListener('click', goTelegramAssigned);
 
-  // Mostrar hint si estamos en in-app browser
+  function applyTranslations() {
+    t = I18N[currentLang] || I18N.es;
+    document.documentElement.lang = currentLang;
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var k = el.getAttribute('data-i18n');
+      if (t[k]) el.textContent = t[k];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(function(el){
+      var k = el.getAttribute('data-i18n-html');
+      if (t[k]) el.innerHTML = t[k];
+    });
+  }
+
+  function setLocation() {
+    var loc = document.getElementById('locationText');
+    if (!loc) return;
+    var parts = [];
+    if (window.__cfRegion) parts.push(window.__cfRegion);
+    if (window.__cfCity) parts.push(window.__cfCity);
+    loc.textContent = parts.length ? parts.join(', ') : (window.__cfCountry || '');
+  }
+
+  if (window.__cfCountry) {
+    currentLang = detectLanguage(window.__cfCountry);
+    applyTranslations();
+    setLocation();
+    console.log('[geo] cf-middleware | country:', window.__cfCountry, '| city:', window.__cfCity);
+  } else {
+    var browserLang = (navigator.language || 'es').toLowerCase().slice(0, 2);
+    if (['es','en','pt'].indexOf(browserLang) !== -1) currentLang = browserLang;
+    applyTranslations();
+
+    fetch('https://ipapi.co/json/').then(function(r){return r.json();}).then(function(d){
+      window.__cfCountry = (d.country_code || '').toUpperCase();
+      window.__cfCity = d.city || '';
+      window.__cfRegion = d.region || '';
+      currentLang = detectLanguage(window.__cfCountry);
+      applyTranslations();
+      setLocation();
+    }).catch(function(){});
+  }
+
   (function(){
     var ua = navigator.userAgent.toLowerCase();
-    var isInApp = /instagram|threads|fban|fbav|twitter|tiktok|snapchat/.test(ua);
-    if (isInApp) document.getElementById('openHint').style.display = 'block';
+    if (/instagram|threads|fban|fbav|twitter|tiktok|snapchat/.test(ua)) {
+      var hint = document.getElementById('openHint');
+      if (hint) hint.style.display = 'block';
+    }
   })();
 
-  // =========================
-  // OVERLAY 18+ CON DEEPLINK AVANZADO
-  // =========================
-  
-  // 1. Mostrar el cartel al pulsar el botón
-  document.getElementById('freeBtn').addEventListener('click',function(){
-    document.getElementById('ageOverlay').style.display='flex';
-    document.body.style.overflow='hidden';
+  document.getElementById('freeBtn').addEventListener('click', function(){
+    document.getElementById('ageOverlay').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
   });
 
-  // 2. ESCAPE DEL IN-APP BROWSER v3
-  // Fase 1: Click en "Soy mayor de 18+" → intenta escapar con JS
-  // Fase 2: Si JS falla (iOS Instagram) → muestra botón <a> real para long press
-
-  let escaped = false;
-
-  document.addEventListener('visibilitychange', function() {
-    if (document.visibilityState === 'hidden') escaped = true;
+  document.getElementById('continueBtn').addEventListener('click', function(){
+    window.location.href = onlyfansURL;
   });
 
-  function showLongPressPhase(targetUrl) {
-    // Mostrar fase 2: botón <a> real para long press
-    document.getElementById('phase1').style.display = 'none';
-    document.getElementById('phase2').style.display = 'block';
-    document.getElementById('longPressLink').href = targetUrl;
-    // Asegurar que el long press funcione (iOS necesita -webkit-touch-callout)
-    document.getElementById('longPressLink').style.webkitTouchCallout = 'default';
+  if (/[?&]debug=1/.test(location.search)) {
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;bottom:10px;left:10px;right:10px;background:rgba(0,0,0,.9);color:#0f0;font:11px/1.4 monospace;padding:10px;border-radius:8px;z-index:99999;border:1px solid #0f0;max-width:500px;margin:auto;word-break:break-all';
+    d.innerHTML = '<b>🐞 GEO DEBUG</b><br>' +
+      'source: ' + (window.__cfCountry ? 'cf-middleware' : 'fallback') + '<br>' +
+      'country: ' + (window.__cfCountry || '??') + '<br>' +
+      'city: ' + (window.__cfCity || '-') + '<br>' +
+      'region: ' + (window.__cfRegion || '-') + '<br>' +
+      'lang: ' + currentLang + '<br>' +
+      'link: <span style="color:#ff0">' + onlyfansURL + '</span>';
+    document.body.appendChild(d);
   }
-
-  function doRedirect() {
-    var targetUrl = onlyfansURL || CONFIG.onlyfansMain;
-    window.location.href = targetUrl;
-  }
-
-  document.getElementById('continueBtn').addEventListener('click', doRedirect);
-
-  // =========================
-  // COUNTDOWN CON LOCALSTORAGE
-  // =========================
-  (function(){
-    const DURATION = 10 * 60; // 10 minutos
-    const STORAGE_KEY = 'offerTimerEndTime';
-    
-    let endTime = localStorage.getItem(STORAGE_KEY);
-    let now = Math.floor(Date.now() / 1000);
-
-    if (!endTime || now >= parseInt(endTime)) {
-      endTime = now + DURATION;
-      localStorage.setItem(STORAGE_KEY, endTime);
-    } else {
-      endTime = parseInt(endTime);
-    }
-
-    const d1 = document.getElementById('d1');
-    const d2 = document.getElementById('d2');
-    const d3 = document.getElementById('d3');
-    const d4 = document.getElementById('d4');
-    const tiles = [d1.parentElement, d2.parentElement, d3.parentElement, d4.parentElement];
-    
-    let total = endTime - Math.floor(Date.now() / 1000);
-
-    function render(){
-      if (total < 0) total = 0;
-      const m = Math.floor(total/60);
-      const s = total % 60;
-      const mm = String(m).padStart(2,'0');
-      const ss = String(s).padStart(2,'0');
-      d1.textContent = mm[0];
-      d2.textContent = mm[1];
-      d3.textContent = ss[0];
-      d4.textContent = ss[1];
-      
-      tiles[2].classList.add('flip');
-      tiles[3].classList.add('flip');
-      if (ss === '59') {
-        tiles[0].classList.add('flip');
-        tiles[1].classList.add('flip');
-      }
-      setTimeout(()=>tiles.forEach(t=>t.classList.remove('flip')),200);
-    }
-    
-    render();
-    
-    const iv = setInterval(()=>{
-      total = endTime - Math.floor(Date.now() / 1000);
-      if (total <= 0){
-        clearInterval(iv);
-        total = 0;
-        render(); 
-        return;
-      }
-      render();
-    }, 1000);
-  })();
-
-  // =========================
-  // RULETA
-  // =========================
-  (function(){
-    var prizes = [
-      { name: 'Foto exclusiva', fullName: '1 Foto exclusiva GRATIS', icon: '<i class="fa-solid fa-camera"></i>' },
-      { name: 'Pack Pies', fullName: 'Pack Pies -70% OFF', icon: '<i class="fa-solid fa-shoe-prints"></i>' },
-      { name: 'Sexting 15 min', fullName: 'Sexting 15 min -65% OFF', icon: '<i class="fa-solid fa-fire"></i>' },
-      { name: 'Audio custom', fullName: 'Audio custom -60% OFF', icon: '<i class="fa-solid fa-microphone"></i>' },
-      { name: 'Pack Completo', fullName: 'Pack Completo -65% OFF', icon: '<i class="fa-solid fa-crown"></i>' },
-      { name: 'Video custom', fullName: 'Video custom -60% OFF', icon: '<i class="fa-solid fa-video"></i>' }
-    ];
-    var n = prizes.length;
-    var segDeg = 360 / n;
-    // Sexting 15 min (index 2) tiene 80% de probabilidad, el resto se reparte el 20%
-    function pickWeightedIndex() {
-      if (Math.random() < 0.8) return 2;
-      var others = [0, 1, 3, 4, 5];
-      return others[Math.floor(Math.random() * others.length)];
-    }
-
-    var wheel = document.getElementById('rouletteWheel');
-    var spinBtn = document.getElementById('spinBtn');
-    var highlight = document.getElementById('rwheelHighlight');
-    var spinning = false;
-    var currentRotation = 0;
-    var PRIZE_KEY = 'val_prize';
-
-    function showPrize(prize) {
-      var popup = document.getElementById('prizePopup');
-      var prizeNameEl = document.getElementById('prizeName');
-      prizeNameEl.innerHTML = prize.icon + ' ' + prize.fullName;
-      popup.style.display = 'flex';
-    }
-
-    var savedPrize = localStorage.getItem(PRIZE_KEY);
-    if (savedPrize) {
-      try {
-        var p = JSON.parse(savedPrize);
-        // Mostrar overlay "Has vuelto"
-        var retOverlay = document.getElementById('returnOverlay');
-        document.getElementById('returnPrizeName').innerHTML = p.icon + ' ' + (p.fullName || p.name);
-        retOverlay.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        document.getElementById('returnBtn').addEventListener('click', function(){
-          retOverlay.style.display = 'none';
-          document.body.style.overflow = '';
-          doRedirect();
-        });
-        // Ocultar ruleta y mostrar premio inline
-        var section = document.querySelector('.roulette-section');
-        section.innerHTML =
-          '<div class="roulette-title">¡Ya tienes tu premio!</div>' +
-          '<div style="margin-top:8px;font-size:28px;font-weight:900;color:#fff;text-shadow:0 0 20px rgba(255,105,180,.8)">' + p.icon + ' ' + (p.fullName || p.name) + '</div>' +
-          '<button class="btn" id="claimSavedBtn" style="margin-top:12px;font-size:15px;padding:12px 22px">SOY MAYOR DE 18 · RECLAMAR →</button>';
-        document.getElementById('claimSavedBtn').addEventListener('click', function(){
-          doRedirect();
-        });
-        var hint = document.getElementById('openHint');
-        if (hint) {
-          hint.classList.add('won');
-          hint.innerHTML = '🎉 ¡Ya ganaste!<br>Toca <strong>•••</strong> arriba para reclamar más rápido';
-        }
-      } catch(e) { localStorage.removeItem(PRIZE_KEY); }
-    } else {
-      spinBtn.addEventListener('click', function(){
-        if (spinning) return;
-        spinning = true;
-        spinBtn.classList.add('disabled');
-
-        var winIndex = pickWeightedIndex();
-        var targetAngle = 360 - (segDeg * winIndex + segDeg / 2);
-        var totalSpin = 360 * 6 + targetAngle;
-        currentRotation += totalSpin;
-
-        highlight.style.opacity = '1';
-        highlight.style.transition = 'transform 4s cubic-bezier(.17,.67,.12,.99)';
-        highlight.style.transform = 'rotate(' + (-currentRotation) + 'deg)';
-
-        wheel.style.transition = 'transform 4s cubic-bezier(.17,.67,.12,.99)';
-        wheel.style.transform = 'rotate(' + currentRotation + 'deg)';
-
-        setTimeout(function(){
-          spinning = false;
-          highlight.style.opacity = '0';
-          setTimeout(function(){
-            highlight.style.transition = 'none';
-            highlight.style.transform = 'rotate(' + (-currentRotation) + 'deg)';
-          }, 300);
-
-          var prize = prizes[winIndex];
-          localStorage.setItem(PRIZE_KEY, JSON.stringify(prize));
-          showPrize(prize);
-
-          // Actualizar hint si está visible (in-app browser)
-          var hint = document.getElementById('openHint');
-          if (hint && hint.style.display !== 'none') {
-            hint.classList.add('won');
-            hint.innerHTML = '🎉 ¡Ya ganaste!<br>Toca <strong>•••</strong> arriba para reclamar más rápido';
-          }
-        }, 4100);
-      });
-    }
-
-    // Bind popup events after DOM is fully loaded
-    document.addEventListener('DOMContentLoaded', function(){
-      var popup = document.getElementById('prizePopup');
-      var claimBtn = document.getElementById('prizeClaimBtn');
-      if (claimBtn) {
-        claimBtn.addEventListener('click', function(){
-          popup.style.display = 'none';
-          doRedirect();
-        });
-      }
-      popup.addEventListener('click', function(e){
-        if (e.target === popup) popup.style.display = 'none';
-      });
-    });
-  })();
-
-  // =========================
-  // DEBUG PANEL (visible con ?debug=1)
-  // =========================
-  (function(){
-    if (!/[?&]debug=1/.test(location.search)) return;
-    var code = window.__cfCountry || '??';
-    var source = window.__cfCountry ? 'cf-middleware' : 'fallback';
-    var show = function(){
-      if (document.getElementById('__geoDebug')) return;
-      var div = document.createElement('div');
-      div.id = '__geoDebug';
-      div.style.cssText = 'position:fixed;bottom:10px;left:10px;right:10px;background:rgba(0,0,0,.9);color:#0f0;font:11px/1.4 monospace;padding:10px;border-radius:8px;z-index:99999;border:1px solid #0f0;max-width:500px;margin:auto;word-break:break-all';
-      div.innerHTML = '<b>🐞 GEO DEBUG</b><br>source: '+source+'<br>country: '+code+'<br>link: <span style="color:#ff0">'+(onlyfansURL||CONFIG.onlyfansMain)+'</span>';
-      document.body.appendChild(div);
-    };
-    if (document.body) show(); else document.addEventListener('DOMContentLoaded', show);
-  })();
-
-  // =========================
-  // GEO
-  // =========================
-  document.addEventListener('DOMContentLoaded',()=>{
-    const regionesES={
-      "Madrid":"Madrid","Catalonia":"Cataluña","Andalusia":"Andalucía","Valencia":"Comunidad Valenciana",
-      "Galicia":"Galicia","Basque Country":"País Vasco","Castile and León":"Castilla y León",
-      "Castile-La Mancha":"Castilla-La Mancha","Canary Islands":"Islas Canarias","Balearic Islands":"Islas Baleares",
-      "Aragon":"Aragón","Murcia":"Murcia","Extremadura":"Extremadura","Asturias":"Asturias","Cantabria":"Cantabria",
-      "Navarre":"Navarra","La Rioja":"La Rioja","Ceuta":"Ceuta","Melilla":"Melilla",
-      "Ciudad de México":"Ciudad de México","Jalisco":"Jalisco","Nuevo León":"Nuevo León",
-      "Estado de México":"Estado de México","Puebla":"Puebla","Guanajuato":"Guanajuato",
-      "Buenos Aires":"Buenos Aires","Córdoba":"Córdoba","Santa Fe":"Santa Fe","Mendoza":"Mendoza","Tucumán":"Tucumán",
-      "Bogotá D.C.":"Bogotá","Antioquia":"Antioquia","Valle del Cauca":"Valle del Cauca","Cundinamarca":"Cundinamarca",
-      "Santiago Metropolitan":"Región Metropolitana de Santiago","Valparaíso":"Valparaíso","Biobío":"Biobío",
-      "Lima Province":"Lima","Arequipa":"Arequipa","La Libertad":"La Libertad",
-      "Distrito Capital":"Caracas","Miranda":"Miranda","Zulia":"Zulia",
-      "Pichincha":"Pichincha","Guayas":"Guayas","Manabí":"Manabí",
-      "California":"California","Florida":"Florida","Texas":"Texas","New York":"Nueva York","Illinois":"Illinois","Nevada":"Nevada",
-      "Montevideo":"Montevideo","Santo Domingo":"Santo Domingo"
-    };
-
-    fetch('https://ipapi.co/json/')
-      .then(r=>r.json())
-      .then(d=>{
-        const city=d.city||'tu ciudad';
-        const region=d.region||'tu provincia';
-        const country=(d.country_name||'').toLowerCase();
-        document.getElementById('city').textContent=city;
-        document.getElementById('province').textContent=regionesES[region]||region;
-
-        const gratis=["spain","mexico","united states","chile"];
-        if(gratis.includes(country))
-          onlyfansURL = CONFIG.onlyfansTrial;
-      })
-      .catch(()=>{
-        document.getElementById('city').textContent='tu ciudad';
-        document.getElementById('province').textContent='tu provincia';
-      });
-  });
 </script>
-
-<!-- Prize popup (hijo directo de body, fuera de cualquier stacking context) -->
-<div class="prize-popup" id="prizePopup">
-  <div class="prize-box">
-    <div class="prize-emoji">🎉</div>
-    <div class="prize-title">¡GANASTE!</div>
-    <div class="prize-name" id="prizeName"></div>
-    <p class="prize-sub">Haz una captura de pantalla de tu premio para reclamarlo</p>
-    <div class="prize-age">⚠️ Contenido exclusivo +18</div>
-    <button class="prize-claim" id="prizeClaimBtn">SOY MAYOR DE 18 · RECLAMAR →</button>
-  </div>
-</div>
 
 </body>
 </html>
