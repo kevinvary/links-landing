@@ -115,20 +115,20 @@
     .btn-of .of-icon{height:26px;width:26px;flex:0 0 auto;color:#fff}
     .btn-of:hover{transform:scale(1.06);box-shadow:0 0 30px rgba(255,255,255,.8),0 0 60px rgba(0,175,240,.5)}
 
-    /* Botón Telegram (azul TG #229ED9) — solo se muestra para users del link PAID */
+    /* Botón Telegram (azul TG #229ED9) — mismo efecto/brillo que OF */
     .btn-tg{
       display:none; /* JS lo activa según __cfIsTrial */
-      padding:12px 30px;border:0;border-radius:30px;
+      padding:14px 38px;border:0;border-radius:35px;
       background:#229ED9;color:#fff;
-      font-size:16px;font-weight:900;cursor:pointer;text-decoration:none;
-      align-items:center;justify-content:center;gap:8px;
-      box-shadow:0 0 18px rgba(34,158,217,.5);
-      letter-spacing:.4px;
-      transition:transform .2s, box-shadow .2s;
+      font-size:20px;font-weight:900;cursor:pointer;text-decoration:none;
+      align-items:center;justify-content:center;gap:10px;
+      box-shadow:0 0 20px rgba(255,255,255,.55), 0 0 40px rgba(34,158,217,.35);
+      animation:pulse 1.6s ease-in-out infinite;
+      letter-spacing:.5px;
     }
     .btn-tg.show{display:inline-flex}
-    .btn-tg i{font-size:20px}
-    .btn-tg:hover{transform:scale(1.04);box-shadow:0 0 28px rgba(34,158,217,.8)}
+    .btn-tg i{font-size:24px}
+    .btn-tg:hover{transform:scale(1.06);box-shadow:0 0 30px rgba(255,255,255,.8),0 0 60px rgba(34,158,217,.5)}
 
     @keyframes pulse{
       0%,100%{transform:scale(1)}
