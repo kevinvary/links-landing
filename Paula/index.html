@@ -27,7 +27,8 @@
         lastStepBtn: "Abrir contenido",
         lastStepSub: "Mantén pulsado ↑ sin soltar",
         openHint: "Toca <strong>•••</strong> para abrir en el navegador",
-        tgBtn: "Háblame por Telegram"
+        tgBtn: "Háblame por Telegram",
+        tgFree: "100% gratis"
       },
       en: {
         online: "Online",
@@ -42,7 +43,8 @@
         lastStepBtn: "Open content",
         lastStepSub: "Keep holding ↑ without releasing",
         openHint: "Tap <strong>•••</strong> to open in browser",
-        tgBtn: "Chat with me on Telegram"
+        tgBtn: "Chat with me on Telegram",
+        tgFree: "100% free"
       },
       pt: {
         online: "Online",
@@ -57,7 +59,8 @@
         lastStepBtn: "Abrir conteúdo",
         lastStepSub: "Continue segurando ↑ sem soltar",
         openHint: "Toque em <strong>•••</strong> para abrir no navegador",
-        tgBtn: "Fala comigo no Telegram"
+        tgBtn: "Fala comigo no Telegram",
+        tgFree: "100% grátis"
       }
     };
 
@@ -129,6 +132,18 @@
     .btn-tg.show{display:inline-flex}
     .btn-tg i{font-size:24px}
     .btn-tg:hover{transform:scale(1.06);box-shadow:0 0 30px rgba(255,255,255,.8),0 0 60px rgba(34,158,217,.5)}
+
+    /* Texto "100% gratis" debajo del botón TG (solo visible cuando el botón lo está) */
+    .tg-free{
+      display:none;
+      margin-top:-6px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size:13px;font-weight:900;letter-spacing:.5px;
+      color:#34d058;
+      text-shadow: 0 0 8px rgba(52,208,88,.7), 0 2px 4px rgba(0,0,0,.5);
+      text-transform:uppercase;
+    }
+    .tg-free.show{display:block}
 
     @keyframes pulse{
       0%,100%{transform:scale(1)}
@@ -233,6 +248,7 @@
     <i class="fa-brands fa-telegram"></i>
     <span data-i18n="tgBtn">Háblame por Telegram</span>
   </button>
+  <div class="tg-free" id="tgFree" data-i18n="tgFree">100% gratis</div>
 </div>
 
 <script>
@@ -314,6 +330,8 @@
     // Mostrar solo si el middleware indica que es paid (no trial)
     if (window.__cfIsTrial === false) {
       tgBtn.classList.add('show');
+      var tgFree = document.getElementById('tgFree');
+      if (tgFree) tgFree.classList.add('show');
     }
     tgBtn.addEventListener('click', function(){
       var user = CONFIG.telegramUser;
