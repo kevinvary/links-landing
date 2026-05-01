@@ -15,6 +15,7 @@
       es: {
         online: "Online",
         tagline: "No vas a creer lo que tengo en OnlyFans ;) 👇🏻💕",
+        taglineTrial: "Suscripción GRATIS si eres de {country} 💕",
         ageTitle: "Contenido para adultos",
         ageDesc: "Este contenido es exclusivo para mayores de 18 años.<br>Confirma tu edad para continuar.",
         ageBtn: "Sí, soy mayor de 18+",
@@ -29,6 +30,7 @@
       en: {
         online: "Online",
         tagline: "You won't believe what I have on OnlyFans ;) 👇🏻💕",
+        taglineTrial: "FREE subscription if you're from {country} 💕",
         ageTitle: "Adult content",
         ageDesc: "This content is exclusive for people over 18 years old.<br>Confirm your age to continue.",
         ageBtn: "Yes, I'm 18+",
@@ -43,6 +45,7 @@
       pt: {
         online: "Online",
         tagline: "Você não vai acreditar no que tenho no OnlyFans ;) 👇🏻💕",
+        taglineTrial: "Assinatura GRÁTIS se você for de {country} 💕",
         ageTitle: "Conteúdo adulto",
         ageDesc: "Este conteúdo é exclusivo para maiores de 18 anos.<br>Confirme sua idade para continuar.",
         ageBtn: "Sim, sou maior de 18+",
@@ -223,6 +226,13 @@
     return 'en';
   }
 
+  function getCountryName(code, lang) {
+    if (!code) return '';
+    try {
+      return new Intl.DisplayNames([lang], {type: 'region'}).of(code) || code;
+    } catch (e) { return code; }
+  }
+
   function applyTranslations() {
     t = I18N[currentLang] || I18N.es;
     document.documentElement.lang = currentLang;
@@ -234,6 +244,14 @@
       var k = el.getAttribute('data-i18n-html');
       if (t[k]) el.innerHTML = t[k];
     });
+    // Override del tagline: si el user es TRIAL, usar el tagline con el país detectado
+    if (window.__cfIsTrial === true && t.taglineTrial && window.__cfCountry) {
+      var taglineEl = document.querySelector('.tagline');
+      if (taglineEl) {
+        var country = getCountryName(window.__cfCountry, currentLang);
+        taglineEl.textContent = t.taglineTrial.replace('{country}', country);
+      }
+    }
   }
 
   function setLocation() {
