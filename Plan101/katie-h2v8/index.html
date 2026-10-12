@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Plan de contenido · Katie · 101 agency</title>
+<style>
+@font-face{font-family:"Inter101";src:url(/assets/inter-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Inter101";src:url(/assets/inter-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Inter101";src:url(/assets/inter-latin-800-normal.woff2) format("woff2");font-weight:800;font-display:swap}
+:root{--bg:#0A0A0A;--surface:#161616;--line:#262626;--ink:#F5F5F5;--ink1:#D4D4D4;--ink2:#8C8C8C;--accent:#E07856;--accent-soft:#2A1E18;--accent-line:#4A2E22;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink1);font:16px/1.55 "Inter101",Inter,system-ui,-apple-system,sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:20px 56px;display:flex;flex-direction:column;gap:28px}
+header{display:flex;justify-content:space-between;align-items:baseline}
+.logo{display:flex;align-items:baseline;gap:8px}
+.logo b{color:var(--accent);font-weight:800;font-size:28px;letter-spacing:-.04em}
+.logo span{color:var(--ink);font-weight:600;font-size:16px}
+.tag{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);font-weight:600}
+h1{color:var(--ink);font-size:clamp(30px,8vw,40px);font-weight:800;letter-spacing:-.03em;line-height:1.08;margin:0;text-wrap:balance}
+h1 em,h2 em{font-style:normal;color:var(--accent)}
+h2{color:var(--ink);font-size:20px;font-weight:800;margin:0 0 12px}
+video{width:100%;aspect-ratio:9/16;max-height:78vh;border-radius:18px;background:var(--surface);border:1px solid var(--line);display:block}
+.big{background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:18px;padding:20px}
+.big .n{color:var(--accent);font-weight:800;font-size:clamp(48px,14vw,68px);line-height:1;letter-spacing:-.04em}
+.big .l{color:var(--ink);font-weight:600;margin-top:6px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.c{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
+.c .l{font-size:13px;color:var(--ink2);font-weight:600}
+.c .v{color:var(--ink);font-size:26px;font-weight:800}
+ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px}
+li::marker{color:var(--accent);font-weight:800}
+p{margin:0}
+.why p+p{margin-top:10px}
+footer{font-size:13px;color:var(--ink2);border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header><div class="logo"><b>101</b><span>agency</span></div><span class="tag">Plan de contenido</span></header>
+  <h1>Hola, Katie. Esto es lo que <em>necesitamos</em> desde ahora.</h1>
+  <video src="plan.mp4" poster="poster.jpg" controls playsinline preload="metadata"></video>
+  <section class="big"><div class="n">21–28</div><div class="l">videos únicos por semana</div></section>
+  <section class="grid">
+    <div class="c"><div class="l">Por día</div><div class="v">3–4</div></div>
+    <div class="c"><div class="l">Por mes</div><div class="v">90–120</div></div>
+    <div class="c"><div class="l">Canciones de lipsync por semana</div><div class="v">5–7</div></div>
+    <div class="c"><div class="l">Publicaciones por día</div><div class="v">3–4</div></div>
+  </section>
+  <section class="why">
+    <h2>Por qué <em>tantos</em> videos</h2>
+    <p>Vamos a publicar en tu cuenta principal (la bandera). Cada cuenta sube <b>1 video al feed y 2 o 3 trial reels por día</b>.</p>
+    <p>Tu bandera lleva <b>videos exclusivos</b>: cada video se sube una sola vez, así que cada publicación necesita un video nuevo.</p>
+  </section>
+  <section>
+    <h2>Lipsync: una canción, varios videos</h2>
+    <p style="margin-bottom:12px">De cada canción sacamos unos 4 recortes buenos. Para que rinda cada grabación:</p>
+    <ol>
+      <li>Grabá la canción entera, no solo el estribillo.</li>
+      <li>Cambiá ropa, lugar o ángulo entre canciones, así cada video se ve distinto.</li>
+      <li>Hacé 2 tomas de las partes fuertes.</li>
+      <li>Luz de frente y la cara en cuadro: en lipsync se mira la boca.</li>
+      <li>Mandá todo crudo: el recorte lo hacemos nosotros.</li>
+    </ol>
+  </section>
+  <footer>El número más bajo es con 2 trial reels por día y el más alto con 3. Si se suman cuentas, el número sube. Cualquier duda, hablalo con tu manager.</footer>
+</main>
+</body>
+</html>
